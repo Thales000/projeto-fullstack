@@ -35,22 +35,8 @@ function App() {
   const handleInputKeyPress = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      handleHeroSearch();
-    }
-  };
-
-  const handleHeroSearch = () => {
-    // Verificação de preenchimento de campo obrigatório
-    if (inputSearch.length < 2) {
-      setError('Para dados mais específicos, digite pelo menos 2 letras');
-      setData(originalData);
       fetchData();
-      return;
     }
-    // Limpa erros anteriores, se houver
-    setError(null);
-    // Realiza a busca
-    fetchData();
   };
 
   const handleHeroChecked = () => {
@@ -77,12 +63,15 @@ function App() {
     fetch('https://api.opendota.com/api/heroStats')
       .then(resp => resp.json())
       .then(data => {
-        if(inputSearch.length < 2) {
-          return
-        }
+        setError(null);
         const formattedSearch = inputSearch.charAt(0).toUpperCase() + inputSearch.slice(1).toLowerCase();
         // Filtra os dados com base em inputSearch
         const filteredData = data.filter(hero => hero.localized_name.includes(formattedSearch));
+        if(filteredData.length === 0){
+          setError('Nenhum herói com essas letras foi encontrado');
+          setData(originalData);
+          return
+        }
         setData(filteredData);
       })
       .catch(err => {
@@ -136,7 +125,7 @@ function App() {
                     ref={nameInputRef}
                     disabled={isHeroSearchDisabled}
                   />
-                  <Button variant='danger' className='mt-4' onClick={handleHeroSearch} disabled={isHeroButtonDisabled}>Pesquisar</Button>
+                  <Button variant='danger' className='mt-4' onClick={fetchData} disabled={isHeroButtonDisabled}>Pesquisar</Button>
                   {error && <Alert className='mt-4 alert-sm' variant="danger">{error}</Alert>}
                 </Form.Group>
               </Col>
