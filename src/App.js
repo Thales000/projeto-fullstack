@@ -6,12 +6,15 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
 
 function App() {
+  // Referência para o campo de entrada do nome do herói
   const nameInputRef = useRef(null);
+  // useState essenciais
   const [inputSearch, setInputSearch] = useState('');
   const [selectedAttribute, setSelectedAttribute] = useState('');
   const [originalData, setOriginalData] = useState([]);
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
+  // useState para o usuário só poder escolher por herói OU por atributo
   const [isHeroChecked, setIsHeroChecked] = useState(true);
   const [isHeroSearchDisabled, setIsHeroSearchDisabled] = useState(false);
   const [isHeroButtonDisabled, setIsHeroButtonDisabled] = useState(false);
@@ -20,7 +23,7 @@ function App() {
   const [isAttrButtonDisabled, setIsAttrButtonDisabled] = useState(true);
 
   useEffect(() => {
-    nameInputRef.current.focus();
+    nameInputRef.current.focus(); // Foca o campo de pesquisa no nome do herói quando inicializado
     fetch('https://api.opendota.com/api/heroStats')
       .then((resp) => resp.json())
       .then((data) => {
@@ -39,26 +42,29 @@ function App() {
     }
   };
 
+  // Quando clicar em pesquisar por herói, dar disable em todos os componentes no de atributo
   const handleHeroChecked = () => {
     setIsHeroChecked(true);
     setIsAttrChecked(false);
-    setIsHeroSearchDisabled(false); // Desabilita o campo de pesquisa
+    setIsHeroSearchDisabled(false);
     setIsHeroButtonDisabled(false);
-    setIsAttrSearchDisabled(true); // Desabilita o campo de pesquisa
+    setIsAttrSearchDisabled(true);
     setIsAttrButtonDisabled(true);
   }
 
+  // Quando clicar em pesquisar por atributo, dar disable em todos os componentes no de herói
   const handleAttrChecked = () => {
     setInputSearch('');
     setError(null);
     setIsHeroChecked(false);
     setIsAttrChecked(true);
-    setIsAttrSearchDisabled(false); // Desabilita o campo de pesquisa
+    setIsAttrSearchDisabled(false);
     setIsAttrButtonDisabled(false);
-    setIsHeroSearchDisabled(true); // Desabilita o campo de pesquisa
+    setIsHeroSearchDisabled(true);
     setIsHeroButtonDisabled(true);
   }
 
+  // Função para buscar dados com base na pesquisa por herói
   const fetchData = () => {
     fetch('https://api.opendota.com/api/heroStats')
       .then(resp => resp.json())
@@ -79,6 +85,7 @@ function App() {
       });
   };
 
+  // Função para buscar dados com base na pesquisa por atributo
   const fetchDataAttr = () => {
     fetch('https://api.opendota.com/api/heroStats')
       .then(resp => resp.json())
