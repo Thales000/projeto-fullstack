@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button, Form, Table, Alert, Image, Container, Row, Col, ToggleButton} from 'react-bootstrap';
 import Footer from './Footer';
+import Header from './Header';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
-import Header from './Header';
 
 function App() {
   const nameInputRef = useRef(null);
@@ -24,8 +24,8 @@ function App() {
     fetch('https://api.opendota.com/api/heroStats')
       .then((resp) => resp.json())
       .then((data) => {
-        setData(data);
-        setOriginalData(data);
+        setData(data); // Define os dados iniciais
+        setOriginalData(data); // Define os dados originais
       })
       .catch((err) => {
         console.log('Error: ', err);
@@ -40,22 +40,25 @@ function App() {
   };
 
   const handleHeroSearch = () => {
+    // Verificação de preenchimento de campo obrigatório
     if (inputSearch.length < 2) {
       setError('Para dados mais específicos, digite pelo menos 2 letras');
       setData(originalData);
       fetchData();
       return;
     }
+    // Limpa erros anteriores, se houver
     setError(null);
+    // Realiza a busca
     fetchData();
   };
 
   const handleHeroChecked = () => {
     setIsHeroChecked(true);
     setIsAttrChecked(false);
-    setIsHeroSearchDisabled(false);
+    setIsHeroSearchDisabled(false); // Desabilita o campo de pesquisa
     setIsHeroButtonDisabled(false);
-    setIsAttrSearchDisabled(true);
+    setIsAttrSearchDisabled(true); // Desabilita o campo de pesquisa
     setIsAttrButtonDisabled(true);
   }
 
@@ -64,9 +67,9 @@ function App() {
     setError(null);
     setIsHeroChecked(false);
     setIsAttrChecked(true);
-    setIsAttrSearchDisabled(false);
+    setIsAttrSearchDisabled(false); // Desabilita o campo de pesquisa
     setIsAttrButtonDisabled(false);
-    setIsHeroSearchDisabled(true);
+    setIsHeroSearchDisabled(true); // Desabilita o campo de pesquisa
     setIsHeroButtonDisabled(true);
   }
 
@@ -78,6 +81,7 @@ function App() {
           return
         }
         const formattedSearch = inputSearch.charAt(0).toUpperCase() + inputSearch.slice(1).toLowerCase();
+        // Filtra os dados com base em inputSearch
         const filteredData = data.filter(hero => hero.localized_name.includes(formattedSearch));
         setData(filteredData);
       })
@@ -119,13 +123,13 @@ function App() {
                     value="1"
                     onChange={handleHeroChecked}
                   >
-                    Escolher por heroi
+                    Escolher por herói
                   </ToggleButton>
                   <Form.Control
                     type='text'
                     size='lg'
                     className='mt-3'
-                    placeholder='Escolha o nome do heroi'
+                    placeholder='Escolha o nome do herói'
                     value={inputSearch}
                     onChange={(e) => setInputSearch(e.target.value)}
                     onKeyDown={handleInputKeyPress}
@@ -153,7 +157,7 @@ function App() {
                   Escolher por atributo
                 </ToggleButton>
                 <Form.Select className='mt-3' size='lg' aria-label="Default select example" onChange={(e) => setSelectedAttribute(e.target.value)} disabled={isAttrSearchDisabled} >
-                  <option value="-">Escolha o atributo do heroi</option>
+                  <option value="-">Escolha o atributo do herói</option>
                   <option value="all">Todos (all)</option>
                   <option value="str">Força (str)</option>
                   <option value="agi">Agilidade (agi)</option>

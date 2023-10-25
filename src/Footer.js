@@ -1,9 +1,13 @@
+import './Footer.css'
+
 function Footer() {
 
     return(
-        <p>
-            Footer
-        </p>
+        <>
+            <footer>
+                DOTA 2 API™
+            </footer>
+        </>
     )
 
 }

@@ -1,9 +1,14 @@
+import { Image } from 'react-bootstrap'
+import './Header.css'
+
 function Header() {
 
     return(
-        <p>
-            Header
-        </p>
+        <>
+            <header>
+                DOTA 2 API: Procurar por heróis
+            </header>
+        </>
     )
 
 }
