@@ -1,3 +1,4 @@
+import React from 'react';
 import { Container, Image, Row, Col } from 'react-bootstrap'
 import './Header.css'
 
@@ -9,7 +10,7 @@ function Header() {
                 <Container>
                     <Row>
                         <Col>
-                            <Image src='https://cdn-icons-png.flaticon.com/512/588/588267.png' width="100px" height="100px" alt='Dota 2 logo'></Image>
+                            <Image style={{ float: 'left' }} src='https://cdn-icons-png.flaticon.com/512/588/588267.png' width="100px" height="100px" alt='Dota 2 logo'></Image>
                         </Col>
                         <Col>
                             <p>DOTA 2 API</p>
