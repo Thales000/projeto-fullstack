@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { ToggleButton, Form, Button, Alert } from 'react-bootstrap';
-import { DataContext } from './DataContext';
-import './HeroNameSearch.css'
+import { DataContext } from '../context/DataContext';
+import '../assets/HeroNameSearch.css'
 
 function HeroNameSearch() {
     const { 

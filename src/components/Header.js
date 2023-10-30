@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Image, Row, Col } from 'react-bootstrap'
-import './Header.css'
+import '../assets/Header.css'
 
 function Header() {
 

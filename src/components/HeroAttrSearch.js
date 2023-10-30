@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Form, ToggleButton, Button } from 'react-bootstrap';
-import { DataContext } from './DataContext';
+import { DataContext } from '../context/DataContext';
 
 function HeroAttrSearch() {
     const { 

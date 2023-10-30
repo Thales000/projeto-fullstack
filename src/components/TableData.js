@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Table, Image } from 'react-bootstrap';
-import { DataContext } from './DataContext';
-import './TableData.css'
+import { DataContext } from '../context/DataContext';
+import '../assets/TableData.css'
 
 function HeroTable() {
     const { data } = useContext(DataContext);

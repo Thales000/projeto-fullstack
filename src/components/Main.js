@@ -3,8 +3,8 @@ import { Container, Row, Col } from 'react-bootstrap';
 import HeroNameSearch from './HeroNameSearch';
 import HeroAttrSearch from './HeroAttrSearch';
 import TableData from './TableData';
-import { DataContext } from './DataContext';
-import './Main.css'
+import { DataContext } from '../context/DataContext';
+import '../assets/Main.css'
 
 function Main() {
 
