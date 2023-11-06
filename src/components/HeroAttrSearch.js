@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Form, ToggleButton, Button } from 'react-bootstrap';
 import { DataContext } from '../context/DataContext';
 
@@ -10,7 +10,14 @@ function HeroAttrSearch() {
         fetchDataAttr, 
         handleAttrChecked, 
         setSelectedAttribute, 
+        attrInputRef
     } = useContext(DataContext);
+
+    useEffect(() => {
+        if(!isAttrSearchDisabled){
+            attrInputRef.current.focus();
+        }
+    }, [isAttrSearchDisabled]);
 
     return (
         <>
@@ -26,7 +33,7 @@ function HeroAttrSearch() {
             >
                 Escolher por atributo
             </ToggleButton>
-            <Form.Select className='mt-3' size='lg' aria-label="Default select example" onChange={(e) => setSelectedAttribute(e.target.value)} disabled={isAttrSearchDisabled} >
+            <Form.Select className='mt-3' size='lg' ref={attrInputRef} aria-label="Default select example" onChange={(e) => setSelectedAttribute(e.target.value)} disabled={isAttrSearchDisabled} >
                 <option value="-">Escolha o atributo do herói</option>
                 <option value="all">Todos (all)</option>
                 <option value="str">Força (str)</option>

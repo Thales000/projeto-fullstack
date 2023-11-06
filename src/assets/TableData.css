@@ -3,20 +3,20 @@ td{
   }
 
 .pagination li a{
-  color: red;
+  color: #982E32;
 }
 
 .pagination li a:focus,
 .pagination li a:hover{
-    color: red;
+    color: #982E32;
 }
 
 .pagination button{
-  background-color: red;
-  border-color: red;
+  background-color: #982E32;
+  border-color: #982E32;
 }
 
 .pagination .page-item.active .page-link{
-  background-color: red;
-  border-color: red
+  background-color: #982E32;
+  border-color: #982E32;
 }

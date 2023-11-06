@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { ToggleButton, Form, Button, Alert } from 'react-bootstrap';
 import { DataContext } from '../context/DataContext';
 import '../assets/HeroNameSearch.css'
@@ -16,6 +16,12 @@ function HeroNameSearch() {
         error, 
         nameInputRef 
     } = useContext(DataContext);
+
+    useEffect(() => {
+        if(!isHeroSearchDisabled){
+            nameInputRef.current.focus();
+        }
+    }, [isHeroSearchDisabled]);
 
     return (
         <>

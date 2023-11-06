@@ -6,6 +6,7 @@ export const DataProvider = ({ children }) => {
 
     // Referência para o campo de entrada do nome do herói
     const nameInputRef = useRef(null);
+    const attrInputRef = useRef(null);
     // useState essenciais
     const [inputSearch, setInputSearch] = useState('');
     const [selectedAttribute, setSelectedAttribute] = useState('');
@@ -120,7 +121,8 @@ export const DataProvider = ({ children }) => {
         currentPage,
         itemsPerPage,
         currentItems,
-        nameInputRef }}>
+        nameInputRef,
+        attrInputRef }}>
       {children}
     </DataContext.Provider>
   );

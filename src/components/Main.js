@@ -24,7 +24,7 @@ function Main() {
         .catch((err) => {
             console.log('Error: ', err);
         });
-    }, [setData, setOriginalData, nameInputRef]);
+    }, []);
 
     return (
         <main className="App-header">

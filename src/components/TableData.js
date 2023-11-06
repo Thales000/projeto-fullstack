@@ -42,7 +42,7 @@ function TableData() {
                 </tbody>
             </Table>
             <Pagination>
-                <Pagination.First onClick={() => paginate(1)}  disabled={currentPage === 1}/>
+                <Pagination.First onClick={() => paginate(1)} disabled={currentPage === 1}/>
                 <Pagination.Prev onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1} />
                 {items}
                 <Pagination.Next onClick={() => paginate(currentPage + 1)} disabled={currentPage === Math.ceil(data.length / itemsPerPage)} />
