@@ -30,7 +30,7 @@ export const DataProvider = ({ children }) => {
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
     }
-  
+
     const handleInputKeyPress = (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -62,23 +62,28 @@ export const DataProvider = ({ children }) => {
   
     // Função para buscar dados com base na pesquisa por herói
     const fetchData = () => {
-      fetch('https://api.opendota.com/api/heroStats')
-        .then(resp => resp.json())
-        .then(data => {
-          setError(null);
-          const formattedSearch = inputSearch.charAt(0).toUpperCase() + inputSearch.slice(1).toLowerCase();
-          // Filtra os dados com base em inputSearch
-          const filteredData = data.filter(hero => hero.localized_name.includes(formattedSearch));
-          if(filteredData.length === 0){
-            setError('Nenhum herói com essas letras foi encontrado');
-            setData(originalData);
-            return
-          }
-          setData(filteredData);
-        })
-        .catch(err => {
-          console.log('Error: ', err);
-        });
+      if(inputSearch.length < 2){
+        setError('No mínimo 2 caracteres têm que ser digitado');
+        setData(originalData);
+      } else {
+        fetch('https://api.opendota.com/api/heroStats')
+          .then(resp => resp.json())
+          .then(data => {
+            setError(null);
+            const formattedSearch = inputSearch.charAt(0).toUpperCase() + inputSearch.slice(1).toLowerCase();
+            // Filtra os dados com base em inputSearch
+            const filteredData = data.filter(hero => hero.localized_name.includes(formattedSearch));
+            if(filteredData.length === 0){
+              setError('Nenhum herói com essas letras foi encontrado');
+              setData(originalData);
+              return
+            }
+            setData(filteredData);
+          })
+          .catch(err => {
+            console.log('Error: ', err);
+          });
+      }
     };
   
     // Função para buscar dados com base na pesquisa por atributo
