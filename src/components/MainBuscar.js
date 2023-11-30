@@ -6,7 +6,7 @@ import TableData from './TableData';
 import { DataContext } from '../context/DataContext';
 import '../assets/Main.css'
 
-function Main() {
+function MainBuscar() {
 
     const { setData,
         setOriginalData,
@@ -46,4 +46,4 @@ function Main() {
     );
 }
 
-export default Main;
+export default MainBuscar;

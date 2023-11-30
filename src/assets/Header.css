@@ -5,3 +5,16 @@ header{
     background-color: #982E32;
     color: white;
 }
+
+.nav-link{
+    color: white !important;
+}
+
+.nav-link:hover{
+    color: #D3D3D3 !important;
+}
+
+.nav-link.active{
+    color: #A9A9A9 !important;
+    text-decoration: underline !important;
+}
