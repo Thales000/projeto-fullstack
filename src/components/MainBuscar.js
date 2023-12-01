@@ -4,7 +4,7 @@ import HeroNameSearch from './HeroNameSearch';
 import HeroAttrSearch from './HeroAttrSearch';
 import TableData from './TableData';
 import { DataContext } from '../context/DataContext';
-import '../assets/Main.css'
+import '../assets/MainBuscar.css'
 
 function MainBuscar() {
 
@@ -27,7 +27,7 @@ function MainBuscar() {
     }, []);
 
     return (
-        <main className="App-header">
+        <main>
             <Container>
                 <Row>
                     <Col>

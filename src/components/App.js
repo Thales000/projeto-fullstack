@@ -16,8 +16,9 @@ function App() {
           <Header />
           <Routes>
             <Route path="/buscar" element={<MainBuscar />} />
-            <Route path="/inserir" element={<MainInserir />} />]
+            <Route path="/inserir" element={<MainInserir />} />
             <Route path="/" element={<Navigate to="/buscar" />} />
+            <Route path="/projeto-fullstack" element={<Navigate to="/buscar" />} />
           </Routes>
           <Footer />
         </DataProvider>

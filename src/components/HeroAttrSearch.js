@@ -33,7 +33,7 @@ function HeroAttrSearch() {
             >
                 Escolher por atributo
             </ToggleButton>
-            <Form.Select className='mt-3' size='lg' ref={attrInputRef} aria-label="Default select example" onChange={(e) => setSelectedAttribute(e.target.value)} disabled={isAttrSearchDisabled} >
+            <Form.Select className='mt-3' size='lg' ref={attrInputRef} onChange={(e) => setSelectedAttribute(e.target.value)} disabled={isAttrSearchDisabled} >
                 <option value="-">Escolha o atributo do herói</option>
                 <option value="all">Todos (all)</option>
                 <option value="str">Força (str)</option>
