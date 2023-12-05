@@ -29,7 +29,16 @@ app.post('/register_hero', async (req, res) => {
     } catch (error) {
         console.error('Erro ao cadastrar herói:', error.message);
     }
-  })
+});
+
+app.get('/get_heroes', async (req, res) => {
+    try {
+        const heroes = await Hero.find(); // Obtém todos os heróis do MongoDB
+        res.json(heroes);
+    } catch (error) {
+        console.error('Erro ao obter heróis:', error.message);
+    }
+});
 
 server.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);

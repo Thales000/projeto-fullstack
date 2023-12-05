@@ -9,12 +9,15 @@ const MainInserir = () => {
   const [attr, setAttr] = useState('');
   const [attackType, setAttackType] = useState('');
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
+
     const hero = {
       imageURL,
-      name,
+      name: capitalizedName,
       attr,
       attackType
     };
@@ -32,14 +35,11 @@ const MainInserir = () => {
   
       if (response.ok) {
         console.log('Herói inserido com sucesso!', hero);
-        // Adicione lógica para limpar os campos do formulário ou exibir mensagem de sucesso
       } else {
         console.error('Erro ao inserir herói:', response.statusText);
-        // Adicione lógica adicional para lidar com erros no frontend
       }
     } catch (error) {
       console.error('Erro ao inserir herói:', error.message);
-      // Adicione lógica adicional para lidar com erros no frontend
     }
   };
   
@@ -85,8 +85,8 @@ const MainInserir = () => {
             <Form.Label>Tipo de Ataque do Herói</Form.Label>
             <Form.Select className='mb-5' name='attackType' onChange={(e) => setAttackType(e.target.value)} value={attackType}>
               <option value="">Escolha o tipo de ataque do herói</option>
-              <option value="melee">Melee</option>
-              <option value="ranged">Ranged</option>
+              <option value="Melee">Melee</option>
+              <option value="Ranged">Ranged</option>
             </Form.Select>
           </Form.Group>
 

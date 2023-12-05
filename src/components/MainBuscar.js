@@ -14,16 +14,16 @@ function MainBuscar() {
     } = useContext(DataContext);
   
     useEffect(() => {
-        nameInputRef.current.focus(); // Foca o campo de pesquisa no nome do herói quando inicializado
-        fetch('https://api.opendota.com/api/heroStats')
-        .then((resp) => resp.json())
-        .then((data) => {
-            setData(data); // Define os dados iniciais
-            setOriginalData(data); // Define os dados originais
-        })
-        .catch((err) => {
-            console.log('Error: ', err);
-        });
+        nameInputRef.current.focus();
+        fetch('http://localhost:3001/get_heroes')
+            .then((resp) => resp.json())
+            .then((data) => {
+                setData(data);
+                setOriginalData(data);
+            })
+            .catch((err) => {
+                console.log('Error: ', err);
+            });
     }, []);
 
     return (

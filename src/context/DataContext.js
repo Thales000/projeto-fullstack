@@ -66,13 +66,13 @@ export const DataProvider = ({ children }) => {
         setError('No mínimo 2 caracteres têm que ser digitado');
         setData(originalData);
       } else {
-        fetch('https://api.opendota.com/api/heroStats')
+        fetch('http://localhost:3001/get_heroes')
           .then(resp => resp.json())
           .then(data => {
             setError(null);
             const formattedSearch = inputSearch.charAt(0).toUpperCase() + inputSearch.slice(1).toLowerCase();
             // Filtra os dados com base em inputSearch
-            const filteredData = data.filter(hero => hero.localized_name.includes(formattedSearch));
+            const filteredData = data.filter(hero => hero.name.includes(formattedSearch));
             if(filteredData.length === 0){
               setError('Nenhum herói com essas letras foi encontrado');
               setData(originalData);
@@ -88,14 +88,14 @@ export const DataProvider = ({ children }) => {
   
     // Função para buscar dados com base na pesquisa por atributo
     const fetchDataAttr = () => {
-      fetch('https://api.opendota.com/api/heroStats')
+      fetch('http://localhost:3001/get_heroes')
         .then(resp => resp.json())
         .then(data => {
           if(selectedAttribute === '-'){
             setData(originalData);
             return
           }
-          const filteredData = data.filter(attr => attr.primary_attr.includes(selectedAttribute));
+          const filteredData = data.filter(attribute => attribute.attr.includes(selectedAttribute));
           setData(filteredData);
         })
         .catch(err => {
