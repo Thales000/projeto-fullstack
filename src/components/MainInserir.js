@@ -4,18 +4,45 @@ import '../assets/MainInserir.css';
 
 const MainInserir = () => {
 
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageURL, setImageURL] = useState('');
   const [name, setName] = useState('');
   const [attr, setAttr] = useState('');
   const [attackType, setAttackType] = useState('');
 
-  const handleChange = (e) => {
-    
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    const hero = {
+      imageURL,
+      name,
+      attr,
+      attackType
+    };
+  
+    try {
+      const response = await fetch('http://localhost:3001/register_hero', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(hero),
+      });
+
+      console.log(hero);
+  
+      if (response.ok) {
+        console.log('Herói inserido com sucesso!', hero);
+        // Adicione lógica para limpar os campos do formulário ou exibir mensagem de sucesso
+      } else {
+        console.error('Erro ao inserir herói:', response.statusText);
+        // Adicione lógica adicional para lidar com erros no frontend
+      }
+    } catch (error) {
+      console.error('Erro ao inserir herói:', error.message);
+      // Adicione lógica adicional para lidar com erros no frontend
+    }
   };
+  
 
   return (
     <main>
@@ -27,8 +54,8 @@ const MainInserir = () => {
               type="text"
               placeholder="Digite a URL da imagem"
               name="imageUrl"
-              value={imageUrl}
-              onChange={handleChange}
+              value={imageURL}
+              onChange={(e) => setImageURL(e.target.value)}
             />
           </Form.Group>
 
@@ -39,14 +66,14 @@ const MainInserir = () => {
               placeholder="Digite o nome do herói"
               name="name"
               value={name}
-              onChange={handleChange}
+              onChange={(e) => setName(e.target.value)}
             />
           </Form.Group>
 
           <Form.Group>
             <Form.Label>Atributo do Herói</Form.Label>
-            <Form.Select className='mb-5' name='attribute' onChange={handleChange}>
-              <option disabled>Escolha o atributo do herói</option>
+            <Form.Select className='mb-5' name='attr' onChange={(e) => setAttr(e.target.value)} value={attr}>
+              <option value="">Escolha o atributo do herói</option>
               <option value="all">Todos (all)</option>
               <option value="str">Força (str)</option>
               <option value="agi">Agilidade (agi)</option>
@@ -56,8 +83,8 @@ const MainInserir = () => {
 
           <Form.Group>
             <Form.Label>Tipo de Ataque do Herói</Form.Label>
-            <Form.Select className='mb-5' name='attackType' onChange={handleChange}>
-              <option disabled>Escolha o tipo de ataque do herói</option>
+            <Form.Select className='mb-5' name='attackType' onChange={(e) => setAttackType(e.target.value)} value={attackType}>
+              <option value="">Escolha o tipo de ataque do herói</option>
               <option value="melee">Melee</option>
               <option value="ranged">Ranged</option>
             </Form.Select>
