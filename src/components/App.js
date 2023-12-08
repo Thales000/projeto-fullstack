@@ -3,6 +3,7 @@ import Footer from './Footer';
 import Header from './Header';
 import MainBuscar from './MainBuscar';
 import MainInserir from './MainInserir';
+import MainLogin from './MainLogin';
 import { Navigate, Routes, Route, BrowserRouter } from 'react-router-dom';
 import { DataProvider } from '../context/DataContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -17,6 +18,7 @@ function App() {
           <Routes>
             <Route path="/buscar" element={<MainBuscar />} />
             <Route path="/inserir" element={<MainInserir />} />
+            <Route path="/login" element={<MainLogin />} />
             <Route path="/" element={<Navigate to="/buscar" />} />
             <Route path="/projeto-fullstack" element={<Navigate to="/buscar" />} />
           </Routes>

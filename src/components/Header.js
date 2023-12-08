@@ -2,6 +2,8 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Container, Image, Row, Col, Nav } from 'react-bootstrap'
 import '../assets/Header.css'
+import PerfilLogar from './PerfilLogar';
+import PerfilLogado from './PerfilLogado'
 
 function Header() {
     const location = useLocation();
@@ -25,7 +27,7 @@ function Header() {
                             </Nav>
                         </Col>
                         <Col className="justify-content-end">
-                            <p>Placeholder perfil</p>
+                            <PerfilLogar />
                         </Col>
                     </Row>
                 </Container>

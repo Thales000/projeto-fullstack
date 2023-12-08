@@ -7,6 +7,6 @@ const heroSchema = new mongoose.Schema({
   attackType: String,
 });
 
-const HeroModel = mongoose.model('Hero', heroSchema, 'heroes');
+const Hero = mongoose.model('Hero', heroSchema, 'heroes');
 
-module.exports = HeroModel;
+module.exports = Hero;

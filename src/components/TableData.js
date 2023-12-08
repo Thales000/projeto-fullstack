@@ -3,9 +3,6 @@ import { Table, Image, Pagination } from 'react-bootstrap';
 import { DataContext } from '../context/DataContext';
 import '../assets/TableData.css'
 
-// @@!! Arrumar e colocar depois no lugar da imageURL !!@@
-//<td> <Image src={item.imageURL} alt='localized_name' thumbnail /> </td>
-
 function TableData() {
     const { 
         data,
@@ -36,7 +33,7 @@ function TableData() {
                 <tbody>
                     {currentItems.map(item => (
                         <tr key={item.id}>
-                            <td>{item.imageURL}</td>
+                            <td> <Image src={item.imageURL} alt='hero_image' thumbnail /> </td>
                             <td>{item.name}</td>
                             <td>{item.attr}</td>
                             <td>{item.attackType}</td>
