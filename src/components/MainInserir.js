@@ -21,12 +21,14 @@ const MainInserir = () => {
       attr,
       attackType
     };
-  
+    
+    const token = localStorage.getItem('token');
     try {
       const response = await fetch('http://localhost:3001/register_hero', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(hero),
       });

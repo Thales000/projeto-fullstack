@@ -32,7 +32,7 @@ function TableData() {
                 </thead>
                 <tbody>
                     {currentItems.map(item => (
-                        <tr key={item.id}>
+                        <tr key={item._id}>
                             <td> <Image src={item.imageURL} alt='hero_image' thumbnail /> </td>
                             <td>{item.name}</td>
                             <td>{item.attr}</td>

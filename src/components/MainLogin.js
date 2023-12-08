@@ -13,28 +13,33 @@ const MainLogin = () => {
     console.log('Password:', password);
 
     try {
-      const response = await fetch('http://localhost:3001/search_user', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ user, password }),
-      });
+        const token = localStorage.getItem('token');
+        console.log("Token antes da requisição: ", token);
 
-      if (response.ok) {
-          const data = await response.json();
-          const token = data.token;
+        const response = await fetch('http://localhost:3001/search_user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ user, password }),
+        });
 
-        console.log("Token LocalStorage: ", token);
-          //Armazenar o token em localStorage
-          localStorage.setItem('token', token);
+        if (response.ok) {
+            const data = await response.json();
+            const token = data.token;
+
+            console.log("Token LocalStorage: ", token);
+            //Armazenar o token em localStorage
+            localStorage.setItem('token', token);
+            
       } else {
-          const errorData = await response.json();
-          alert(`Erro: ${errorData.message}`);
+            const errorData = await response.json();
+            console.log(`Erro: ${errorData.message}`);
       }
-  } catch (error) {
-      console.error('Erro ao autenticar usuário:', error.message);
-  }
+    } catch (error) {
+        console.error('Erro ao autenticar usuário:', error.message);
+    }
   };
 
   return (

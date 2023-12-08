@@ -14,8 +14,15 @@ function MainBuscar() {
     } = useContext(DataContext);
   
     useEffect(() => {
-        nameInputRef.current.focus();
-        fetch('http://localhost:3001/get_heroes')
+        const token = localStorage.getItem('token');
+
+        fetch('http://localhost:3001/get_heroes', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        })
             .then((resp) => resp.json())
             .then((data) => {
                 setData(data);

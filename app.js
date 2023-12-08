@@ -13,7 +13,9 @@ const User = require('./src/models/User');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+    exposedHeaders: ['Authorization'],
+}));
 
 mongoose.connect(process.env.DB).then(() => {
     console.log('Conectado ao banco de dados com sucesso!');
@@ -21,16 +23,48 @@ mongoose.connect(process.env.DB).then(() => {
     console.log('Erro ao se conectar com ao banco de dados: ' + erro);
 })
 
+app.use((req, res, next) => {
+    console.log("Headers da requisição: ", req.headers);
+    next();
+  });
+
 const verifyToken = (req, res, next) => {
-    const token = req.header('Authorization');
+    const token = req.headers['authorization'];
+    console.log("token do verify: ", req.headers['authorization']);
     if (!token) return console.log("Acesso negado")
-  
-    jwt.verify(token, process.env.TOKEN_KEY, (err, user) => {
+    
+    const tokenSplited = token.split(' ')[1];
+    jwt.verify(tokenSplited, process.env.JWT_SECRET, (err, user) => {
       if (err) return console.log("Token invalido")
       req.user = user;
       next();
     });
-  };
+};
+
+app.post('/search_user', async (req, res) => {
+    const { user, password } = req.body;
+    console.log("JWT_SECRET",process.env.JWT_SECRET);
+
+    try {
+        const foundUser = await User.findOne({ user: user });
+
+        if (foundUser) {
+            if (foundUser.password === password) {
+                //Gerar token JWT caso ache o usuário com senha correta
+                const token = jwt.sign({ userId: foundUser._id }, process.env.JWT_SECRET);
+                console.log("token: ", token);
+                console.log({ token: token });
+                res.json({ token: token });
+            } else {
+                console.log("Senha incorreta");
+            }
+        } else {
+            console.log("Usuário não encontrado");
+        }
+    } catch (error) {
+        console.error('Erro ao autenticar usuário:', error);
+    }
+});
 
 app.post('/register_hero', verifyToken, async (req, res) => {
     try{
@@ -44,40 +78,12 @@ app.post('/register_hero', verifyToken, async (req, res) => {
     }
 });
 
-app.get('/get_heroes', verifyToken , async (req, res) => {
+app.get('/get_heroes', verifyToken, async (req, res) => {
     try {
         const heroes = await Hero.find(); // Obtém todos os heróis do MongoDB
         res.json(heroes);
     } catch (error) {
         console.error('Erro ao obter heróis:', error.message);
-    }
-});
-
-app.post('/search_user', async (req, res) => {
-    const { user, password } = req.body;
-    console.log("JWT_SECRET",process.env.JWT_SECRET);
-
-
-    try {
-        const foundUser = await User.findOne({ user: user });
-
-        if (foundUser) {
-
-            if (foundUser.password === password) {
-                //Gerar token JWT caso ache o usuário com senha correta
-                var token = jwt.sign({ userId: foundUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-                console.log("token: ", token);
-                res.json({ token: token });
-            } else {
-                //Senha incorreta
-                console.log("Senha incorreta");
-            }
-        } else {
-            //Usuário não encontrado
-            console.log("Usuário não encontrado");
-        }
-    } catch (error) {
-        console.error('Erro ao autenticar usuário:', error);
     }
 });
 

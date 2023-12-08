@@ -66,7 +66,15 @@ export const DataProvider = ({ children }) => {
         setError('No mínimo 2 caracteres têm que ser digitado');
         setData(originalData);
       } else {
-        fetch('http://localhost:3001/get_heroes')
+        const token = localStorage.getItem('token');
+
+        fetch('http://localhost:3001/get_heroes', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        })
           .then(resp => resp.json())
           .then(data => {
             setError(null);
@@ -88,7 +96,15 @@ export const DataProvider = ({ children }) => {
   
     // Função para buscar dados com base na pesquisa por atributo
     const fetchDataAttr = () => {
-      fetch('http://localhost:3001/get_heroes')
+      const token = localStorage.getItem('token');
+      
+      fetch('http://localhost:3001/get_heroes', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        })
         .then(resp => resp.json())
         .then(data => {
           if(selectedAttribute === '-'){
