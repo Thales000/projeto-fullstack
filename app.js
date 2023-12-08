@@ -15,14 +15,14 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cors());
 
-mongoose.connect('mongodb+srv://Thales000:xmongodbx321@clusterprojetoweb.tegkhw0.mongodb.net/dota2db').then(() => {
+mongoose.connect(process.env.DB).then(() => {
     console.log('Conectado ao banco de dados com sucesso!');
 }).catch((erro) => {
     console.log('Erro ao se conectar com ao banco de dados: ' + erro);
 })
 
 const verifyToken = (req, res, next) => {
-
+    const token = req.header('Authorization');
     if (!token) return console.log("Acesso negado")
   
     jwt.verify(token, process.env.TOKEN_KEY, (err, user) => {
@@ -56,6 +56,7 @@ app.get('/get_heroes', verifyToken , async (req, res) => {
 app.post('/search_user', async (req, res) => {
     const { user, password } = req.body;
     console.log("JWT_SECRET",process.env.JWT_SECRET);
+
 
     try {
         const foundUser = await User.findOne({ user: user });
