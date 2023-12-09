@@ -7,6 +7,7 @@ import PerfilLogado from './PerfilLogado'
 
 function Header() {
     const location = useLocation();
+    const token = localStorage.getItem('token');
 
     return(
         <>
@@ -27,7 +28,7 @@ function Header() {
                             </Nav>
                         </Col>
                         <Col className="justify-content-end">
-                            <PerfilLogar />
+                            {token ? <PerfilLogado /> : <PerfilLogar />}
                         </Col>
                     </Row>
                 </Container>

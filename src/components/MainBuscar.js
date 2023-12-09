@@ -4,7 +4,7 @@ import HeroNameSearch from './HeroNameSearch';
 import HeroAttrSearch from './HeroAttrSearch';
 import TableData from './TableData';
 import { DataContext } from '../context/DataContext';
-import '../assets/MainBuscar.css'
+import '../assets/Main.css'
 
 function MainBuscar() {
 

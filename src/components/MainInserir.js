@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Container } from 'react-bootstrap';
-import '../assets/MainInserir.css';
+import '../assets/Main.css';
 
 const MainInserir = () => {
 

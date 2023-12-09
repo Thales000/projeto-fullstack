@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import '../assets/MainLogin.css';
+import { useNavigate} from 'react-router-dom';
+import '../assets/Main.css';
 
 const MainLogin = () => {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleUserSubmit = async (e) => {
     e.preventDefault();
@@ -32,11 +34,13 @@ const MainLogin = () => {
             console.log("Token LocalStorage: ", token);
             //Armazenar o token em localStorage
             localStorage.setItem('token', token);
+
+            navigate('/buscar');
             
-      } else {
-            const errorData = await response.json();
-            console.log(`Erro: ${errorData.message}`);
-      }
+        } else {
+                const errorData = await response.json();
+                console.log(`Erro: ${errorData.message}`);
+        }
     } catch (error) {
         console.error('Erro ao autenticar usuário:', error.message);
     }
