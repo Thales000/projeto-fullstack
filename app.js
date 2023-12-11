@@ -8,6 +8,12 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 require("dotenv").config();
 const PORT = 3001;
+const redis = require('redis');
+const redisClient = redis.createClient({
+    host: 'localhost',
+    port: 6379,
+});
+
 const Hero = require('./src/models/Hero');
 const User = require('./src/models/User');
 
@@ -77,16 +83,27 @@ app.post('/register_hero', verifyToken, async (req, res) => {
         console.error('Erro ao cadastrar herói:', error.message);
     }
 });
-
 app.get('/get_heroes', verifyToken, async (req, res) => {
     try {
+        const heroesFromCache = await redisClient.get('getAllHeroes');
+        if(heroesFromCache){
+            const parsedHeroes = JSON.parse(heroesFromCache);
+            console.log("heroesFromCache: ", parsedHeroes)
+            return res.json(parsedHeroes);
+        }
         const heroes = await Hero.find(); // Obtém todos os heróis do MongoDB
+        await redisClient.set('getAllHeroes', JSON.stringify(heroes), { EX: 60 });
+        console.log("Heroes: ", heroes)
         res.json(heroes);
     } catch (error) {
         console.error('Erro ao obter heróis:', error.message);
     }
 });
 
-server.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-})
+const startup = async() => {
+    await redisClient.connect();
+    server.listen(PORT, () => {
+        console.log(`Servidor rodando na porta ${PORT}`);
+    });
+};
+startup();
