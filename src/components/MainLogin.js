@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
-import { useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../assets/Main.css';
 
 const MainLogin = () => {
@@ -14,7 +14,6 @@ const MainLogin = () => {
     e.preventDefault();
     setPasswordError(null);
     setUserError(null);
-
 
     console.log('User:' , user);
     console.log('Password:', password);
@@ -94,6 +93,8 @@ const MainLogin = () => {
                 <Button variant="primary btn-danger" type="submit" className='my-4'>
                 Entrar
                 </Button>
+
+                <p>Não tem uma conta? <Link to="/cadastro" className='nav-link'>Criar</Link></p>
             </Form>
             </Col>
         </Row>

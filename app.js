@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const server = require('http').createServer(app);
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const helmet = require('helmet');
 const { body } = require('express-validator');
 require("dotenv").config();
@@ -97,7 +96,26 @@ app.post('/save_log', async (req, res) => {
     }
   });
 
-  app.post('/register_hero', verifyToken, [
+    app.post('/register_user', async (req, res) => {
+    try {
+
+        const { user, password } = req.body;
+        const foundUser = await User.findOne({ user: user });
+        if(foundUser){
+            return res.status(401).json({ error: "Usuário já existente" });
+        }
+
+        const newUser = new User({ user, password });
+        await newUser.save();
+
+        res.status(200).json({ message: 'Usuário cadastrado com sucesso' });
+    } catch (error) {
+        console.error('Erro ao cadastrar usuário:', error);
+        res.status(500).json({ error: 'Erro ao cadastrar usuário' });
+    }
+});
+
+app.post('/register_hero', verifyToken, [
     body('imageURL').escape(),
     body('name').escape(),
     body('attr').escape(),
