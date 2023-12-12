@@ -12,7 +12,8 @@ function HeroNameSearch() {
         handleInputKeyPress, 
         inputSearch,
         setInputSearch,
-        fetchData, 
+        fetchData,
+        fetchAllData,
         error, 
         nameInputRef 
     } = useContext(DataContext);
@@ -49,7 +50,9 @@ function HeroNameSearch() {
                         ref={nameInputRef}
                         disabled={isHeroSearchDisabled}
                     />
-                    <Button variant='danger' size='lg' className='mt-4' onClick={fetchData} disabled={isHeroButtonDisabled}>Pesquisar</Button>
+                    <Button variant='danger' size='lg' className='mt-4 mb-2' onClick={fetchData} disabled={isHeroButtonDisabled}>Pesquisar</Button>
+                    <div></div>
+                    <Button variant='danger' size='lg' className='mt-4' onClick={fetchAllData} disabled={isHeroButtonDisabled}>Pesquisar por todos os heróis</Button>
                     {error && <Alert className='mt-4 alert-sm' variant="danger">{error}</Alert>}
                 </Form.Group>
             </Form>

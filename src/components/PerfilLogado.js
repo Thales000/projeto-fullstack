@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { DataContext } from '../context/DataContext';
 import '../assets/Header.css'
 
 function LogarPerfil() {
+    const { 
+        setData
+    } = useContext(DataContext);
     const location = useLocation();
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
@@ -10,6 +14,7 @@ function LogarPerfil() {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
+        setData([]);
         navigate('/buscar');
     };
 

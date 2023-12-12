@@ -38,11 +38,15 @@ app.use((req, res, next) => {
 const verifyToken = (req, res, next) => {
     const token = req.headers['authorization'];
     console.log("token do verify: ", req.headers['authorization']);
-    if (!token || token === 'Bearer null') return console.log("Acesso negado")
+    if (!token || token === 'Bearer null') {
+        console.log("Acesso negado");
+    }
     
     const tokenSplited = token.split(' ')[1];
     jwt.verify(tokenSplited, process.env.JWT_SECRET, (err, user) => {
-      if (err) return console.log("Token invalido")
+        if (err) {
+            console.log("Token inválido");
+        }
       req.user = user;
       next();
     });

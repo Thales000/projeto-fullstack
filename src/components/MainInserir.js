@@ -50,7 +50,9 @@ const MainInserir = () => {
         setAttackType('');
       } else {
         const errorData = await response.json();
-        if (errorData.error === "Sem URL") {
+        if (!token) {
+          setInserirError("Faça login no site primeiro para poder inserir o herói");
+        } else if (errorData.error === "Sem URL") {
           setInserirError("Campo da URL da imagem precisa ser preenchida");
         } else if (errorData.error === "Sem nome") {
           setInserirError("Campo do nome do herói precisa ser preenchido");

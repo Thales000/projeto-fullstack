@@ -10,7 +10,6 @@ export const DataProvider = ({ children }) => {
     // useState essenciais
     const [inputSearch, setInputSearch] = useState('');
     const [selectedAttribute, setSelectedAttribute] = useState('');
-    const [originalData, setOriginalData] = useState([]);
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
     // useState para o usuário só poder escolher por herói OU por atributo
@@ -59,16 +58,46 @@ export const DataProvider = ({ children }) => {
       setIsHeroSearchDisabled(true);
       setIsHeroButtonDisabled(true);
     }
+
+    // Função para buscar todos os heróis
+    const fetchAllData = () => {
+      setError(null);
+      const token = localStorage.getItem('token');
+      const decodedToken = token ? JSON.parse(atob(token.split('.')[1])) : null;
+      if(decodedToken === null){
+        setError('Faça login no site primeiro para poder procurar')
+        setData([]);
+        return
+      }
+      fetch('http://localhost:3001/get_heroes', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        })
+          .then(resp => resp.json())
+          .then(data => { 
+            setData(data);
+          })
+          .catch(err => {
+            console.log('Error: ', err);
+          });
+    }
   
     // Função para buscar dados com base na pesquisa por herói
     const fetchData = () => {
+      setError(null);
+      const token = localStorage.getItem('token');
+      const decodedToken = token ? JSON.parse(atob(token.split('.')[1])) : null;
+      if(decodedToken === null){
+        setError('Faça login no site primeiro para poder procurar')
+        setData([]);
+        return
+      }
       if(inputSearch.length < 2){
         setError('No mínimo 2 caracteres têm que ser digitado');
-        setData(originalData);
       } else {
-        const token = localStorage.getItem('token');
-        const decodedToken = JSON.parse(atob(token.split('.')[1]));
-
         fetch('http://localhost:3001/get_heroes', {
           method: 'GET',
           headers: {
@@ -78,7 +107,6 @@ export const DataProvider = ({ children }) => {
         })
           .then(resp => resp.json())
           .then(data => {
-            setError(null);
             const formattedSearch = inputSearch.charAt(0).toUpperCase() + inputSearch.slice(1).toLowerCase();
 
             //Salvamento do log da pesquisa
@@ -106,7 +134,6 @@ export const DataProvider = ({ children }) => {
             const filteredData = data.filter(hero => hero.name.includes(formattedSearch));
             if(filteredData.length === 0){
               setError('Nenhum herói com essas letras foi encontrado');
-              setData(originalData);
               return
             }
             setData(filteredData);
@@ -119,8 +146,14 @@ export const DataProvider = ({ children }) => {
   
     // Função para buscar dados com base na pesquisa por atributo
     const fetchDataAttr = () => {
+      setError(null);
       const token = localStorage.getItem('token');
-      
+      const decodedToken = token ? JSON.parse(atob(token.split('.')[1])) : null;
+      if(decodedToken === null){
+        setError('Faça login no site primeiro para poder procurar')
+        setData([]);
+        return
+      }      
       fetch('http://localhost:3001/get_heroes', {
           method: 'GET',
           headers: {
@@ -130,10 +163,6 @@ export const DataProvider = ({ children }) => {
         })
         .then(resp => resp.json())
         .then(data => {
-          if(selectedAttribute === '-'){
-            setData(originalData);
-            return
-          }
           const filteredData = data.filter(attribute => attribute.attr.includes(selectedAttribute));
           setData(filteredData);
         })
@@ -144,7 +173,6 @@ export const DataProvider = ({ children }) => {
 
   return (
     <DataContext.Provider value={{ setData,
-        setOriginalData,
         setInputSearch,
         setSelectedAttribute,
         isHeroChecked,
@@ -156,6 +184,7 @@ export const DataProvider = ({ children }) => {
         handleHeroChecked,
         handleInputKeyPress,
         handleAttrChecked,
+        fetchAllData,
         fetchData,
         fetchDataAttr,
         inputSearch,

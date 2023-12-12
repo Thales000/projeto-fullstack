@@ -6,11 +6,11 @@ const MainPerfil = () => {
   return (
     <main>
         <div className="container mt-4">
-            <h2>Seu Perfil</h2>
+            <h2 className='mb-5' >Seu Perfil</h2>
 
             <h3>Notificações:</h3>
 
-            <p>colocar dinamicamente depois // websocket/etc</p>
+            <p>colocar dinamicamente depois // WebSocket/RabbitMQ</p>
 
         </div>
     </main>
