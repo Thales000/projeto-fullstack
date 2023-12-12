@@ -65,9 +65,11 @@ app.post('/search_user', async (req, res) => {
                 res.json({ token: token });
             } else {
                 console.log("Senha incorreta");
+                res.status(401).json({ error: "Senha incorreta" });
             }
         } else {
             console.log("Usuário não encontrado");
+            res.status(404).json({ error: "Usuário não encontrado" });
         }
     } catch (error) {
         console.error('Erro ao autenticar usuário:', error);

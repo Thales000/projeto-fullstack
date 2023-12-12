@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate} from 'react-router-dom';
 import '../assets/Main.css';
 
 const MainLogin = () => {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
+  const [userError, setUserError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
   const navigate = useNavigate();
 
   const handleUserSubmit = async (e) => {
     e.preventDefault();
+    setPasswordError(null);
+    setUserError(null);
+
 
     console.log('User:' , user);
     console.log('Password:', password);
@@ -38,8 +43,14 @@ const MainLogin = () => {
             navigate('/buscar');
             
         } else {
-                const errorData = await response.json();
+            const errorData = await response.json();
+            if (errorData.error === "Senha incorreta") {
+                setPasswordError("Senha incorreta. Tente novamente.");
+            } else if (errorData.error === "Usuário não encontrado") {
+                setUserError("Usuário não encontrado. Verifique o nome de usuário.");
+            } else {
                 console.log(`Erro: ${errorData.message}`);
+            }
         }
     } catch (error) {
         console.error('Erro ao autenticar usuário:', error.message);
@@ -65,6 +76,7 @@ const MainLogin = () => {
                     required
                 />
                 </Form.Group>
+                {userError && <Alert className='my-3 alert-sm' variant="danger">{userError}</Alert>}
 
                 <Form.Group>
                 <Form.Label>Senha</Form.Label>
@@ -77,6 +89,7 @@ const MainLogin = () => {
                     required
                 />
                 </Form.Group>
+                {passwordError && <Alert className='my-3 alert-sm' variant="danger">{passwordError}</Alert>}
 
                 <Button variant="primary btn-danger" type="submit" className='my-4'>
                 Entrar
