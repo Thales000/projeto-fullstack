@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const server = require('http').createServer(app);
 const jwt = require('jsonwebtoken');
 const helmet = require('helmet');
+const bcrypt = require('bcrypt');
 const { body } = require('express-validator');
 require("dotenv").config();
 const PORT = 3001;
@@ -64,7 +65,9 @@ app.post('/search_user', [
         const foundUser = await User.findOne({ user: user });
 
         if (foundUser) {
-            if (foundUser.password === password) {
+            const isPasswordValid = await bcrypt.compare(password, foundUser.password);
+
+            if (isPasswordValid) {
                 //Gerar token JWT caso ache o usuário com senha correta
                 const token = jwt.sign({ user: foundUser.user }, process.env.JWT_SECRET);
 
@@ -105,7 +108,9 @@ app.post('/save_log', async (req, res) => {
             return res.status(401).json({ error: "Usuário já existente" });
         }
 
-        const newUser = new User({ user, password });
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = new User({ user, password: hashedPassword });
         await newUser.save();
 
         res.status(200).json({ message: 'Usuário cadastrado com sucesso' });
