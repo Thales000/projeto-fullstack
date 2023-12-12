@@ -5,6 +5,8 @@ import '../assets/Header.css'
 function LogarPerfil() {
     const location = useLocation();
     const navigate = useNavigate();
+    const token = localStorage.getItem('token');
+    const decodedToken = JSON.parse(atob(token.split('.')[1]));
 
     const handleLogout = () => {
         // Remova o token do localStorage
@@ -15,9 +17,9 @@ function LogarPerfil() {
 
     return(
         <>
-            <p>Seja bem-vindo!</p>
-            <Link to="/perfil" className={`nav-link ${location.pathname === '/perfil' ? 'active' : ''}`}>Perfil/Notificações</Link>
-            <p onClick={handleLogout} style={{ cursor: 'pointer' }}>
+            <p className='smaller'>Seja bem-vindo, {decodedToken.user}!</p>
+            <Link to="/perfil" className={`smaller nav-link ${location.pathname === '/perfil' ? 'active' : ''}`}>Perfil/Notificações</Link>
+            <p className='smaller' onClick={handleLogout} style={{ cursor: 'pointer' }}>
                 Desconectar
             </p>
         </>

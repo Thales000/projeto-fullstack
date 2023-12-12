@@ -47,6 +47,7 @@ const verifyToken = (req, res, next) => {
     });
 };
 
+
 app.post('/search_user', async (req, res) => {
     const { user, password } = req.body;
     console.log("JWT_SECRET",process.env.JWT_SECRET);
@@ -57,7 +58,9 @@ app.post('/search_user', async (req, res) => {
         if (foundUser) {
             if (foundUser.password === password) {
                 //Gerar token JWT caso ache o usuário com senha correta
-                const token = jwt.sign({ userId: foundUser._id }, process.env.JWT_SECRET);
+                const token = jwt.sign({ userId: foundUser._id, user: foundUser.user }, process.env.JWT_SECRET);
+
+                console.log("FoundUser /search_user: ", foundUser);
                 console.log("token: ", token);
                 console.log({ token: token });
                 res.json({ token: token });
@@ -85,6 +88,7 @@ app.post('/register_hero', verifyToken, async (req, res) => {
         console.error('Erro ao cadastrar herói:', error.message);
     }
 });
+
 app.get('/get_heroes', verifyToken, async (req, res) => {
     try {
         const heroesFromCache = await redisClient.get('getAllHeroes');
