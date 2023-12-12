@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const server = require('http').createServer(app);
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { body } = require('express-validator');
 require("dotenv").config();
 const PORT = 3001;
 const redis = require('redis');
@@ -13,7 +14,6 @@ const redisClient = redis.createClient({
     host: 'localhost',
     port: 6379,
 });
-
 const Hero = require('./src/models/Hero');
 const User = require('./src/models/User');
 const Log = require('./src/models/Log');
@@ -52,7 +52,10 @@ const verifyToken = (req, res, next) => {
     });
 };
 
-app.post('/search_user', async (req, res) => {
+app.post('/search_user', [
+    body('user').escape(),
+    body('password').escape(),
+], async (req, res) => {
     const { user, password } = req.body;
     console.log("JWT_SECRET",process.env.JWT_SECRET);
 
@@ -92,15 +95,20 @@ app.post('/save_log', async (req, res) => {
     }
   });
 
-  app.post('/register_hero', verifyToken, async (req, res) => {
+  app.post('/register_hero', verifyToken, [
+    body('imageURL').escape(),
+    body('name').escape(),
+    body('attr').escape(),
+    body('attackType').escape(),
+], async (req, res) => {
     try {
-        if (req.body.imageURL === '') {
+        if (!req.body.imageURL) {
             return res.status(401).json({ error: "Sem URL" });
-        } else if (req.body.name === '') {
+        } else if (!req.body.name) {
             return res.status(401).json({ error: "Sem nome" });
-        } else if (req.body.attr === '') {
+        } else if (!req.body.attr) {
             return res.status(401).json({ error: "Sem atributo" });
-        } else if (req.body.attackType === '') {
+        } else if (!req.body.attackType) {
             return res.status(401).json({ error: "Sem tipo de ataque" });
         }
         const newHero = new Hero(req.body);
