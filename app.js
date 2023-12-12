@@ -16,6 +16,7 @@ const redisClient = redis.createClient({
 
 const Hero = require('./src/models/Hero');
 const User = require('./src/models/User');
+const Log = require('./src/models/Log');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -47,7 +48,6 @@ const verifyToken = (req, res, next) => {
     });
 };
 
-
 app.post('/search_user', async (req, res) => {
     const { user, password } = req.body;
     console.log("JWT_SECRET",process.env.JWT_SECRET);
@@ -58,9 +58,8 @@ app.post('/search_user', async (req, res) => {
         if (foundUser) {
             if (foundUser.password === password) {
                 //Gerar token JWT caso ache o usuário com senha correta
-                const token = jwt.sign({ userId: foundUser._id, user: foundUser.user }, process.env.JWT_SECRET);
+                const token = jwt.sign({ user: foundUser.user }, process.env.JWT_SECRET);
 
-                console.log("FoundUser /search_user: ", foundUser);
                 console.log("token: ", token);
                 console.log({ token: token });
                 res.json({ token: token });
@@ -74,6 +73,18 @@ app.post('/search_user', async (req, res) => {
         console.error('Erro ao autenticar usuário:', error);
     }
 });
+
+app.post('/save_log', async (req, res) => {
+    try {
+      const logData = req.body;
+      const newLog = new Log(logData);
+      await newLog.save();
+  
+      console.log("Log salvo com sucesso!");
+    } catch (error) {
+      console.error('Erro ao salvar o log:', error);
+    }
+  });
 
 app.post('/register_hero', verifyToken, async (req, res) => {
     try{

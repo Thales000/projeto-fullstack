@@ -67,6 +67,7 @@ export const DataProvider = ({ children }) => {
         setData(originalData);
       } else {
         const token = localStorage.getItem('token');
+        const decodedToken = JSON.parse(atob(token.split('.')[1]));
 
         fetch('http://localhost:3001/get_heroes', {
           method: 'GET',
@@ -79,6 +80,28 @@ export const DataProvider = ({ children }) => {
           .then(data => {
             setError(null);
             const formattedSearch = inputSearch.charAt(0).toUpperCase() + inputSearch.slice(1).toLowerCase();
+
+            //Salvamento do log da pesquisa
+            const logData = {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify({
+                username: decodedToken.user,  // Substitua pelo nome do usuário apropriado
+                searchTerm: formattedSearch,
+              })
+            };
+            fetch('http://localhost:3001/save_log', logData)
+            .then(response => response.json())
+            .then(data => {
+              console.log('Log salvo com sucesso!', data);
+            })
+            .catch(error => {
+              console.error('Erro ao salvar o log:', error);
+            });
+    
             // Filtra os dados com base em inputSearch
             const filteredData = data.filter(hero => hero.name.includes(formattedSearch));
             if(filteredData.length === 0){

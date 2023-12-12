@@ -5,7 +5,7 @@ const heroSchema = new mongoose.Schema({
   name: String,
   attr: String,
   attackType: String,
-});
+}, { versionKey: false });
 
 const Hero = mongoose.model('Hero', heroSchema, 'heroes');
 

@@ -9,16 +9,14 @@ function LogarPerfil() {
     const decodedToken = JSON.parse(atob(token.split('.')[1]));
 
     const handleLogout = () => {
-        // Remova o token do localStorage
         localStorage.removeItem('token');
-        // Redirecione para a página de login ou outra página desejada
         navigate('/buscar');
     };
 
     return(
         <>
             <p className='smaller'>Seja bem-vindo, {decodedToken.user}!</p>
-            <Link to="/perfil" className={`smaller nav-link ${location.pathname === '/perfil' ? 'active' : ''}`}>Perfil/Notificações</Link>
+            <Link to="/perfil" className={`nav-link ${location.pathname === '/perfil' ? 'active' : ''}`}>Perfil/Notificações</Link>
             <p className='smaller' onClick={handleLogout} style={{ cursor: 'pointer' }}>
                 Desconectar
             </p>
