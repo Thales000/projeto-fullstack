@@ -42,7 +42,6 @@ const MainCadastrar = () => {
             }
         } catch (error) {
             console.error('Erro ao cadastrar usuário:', error.message);
-            console.log('Resposta completa:', await error.response.text());
         }
     };
 

@@ -33,15 +33,9 @@ mongoose.connect(process.env.DB).then(() => {
     console.log('Erro ao se conectar com ao banco de dados: ' + erro);
 })
 
-app.use((req, res, next) => {
-    console.log("Headers da requisição: ", req.headers);
-    next();
-  });
-  
-
 const verifyToken = (req, res, next) => {
     const token = req.headers['authorization'];
-    console.log("token do verify: ", req.headers['authorization']);
+
     if (!token || token === 'Bearer null') {
         console.log("Acesso negado");
     }
@@ -69,7 +63,6 @@ app.post('/search_user', [
     body('password').escape(),
 ], loginLimiter, async (req, res) => {
     const { user, password } = req.body;
-    console.log("JWT_SECRET",process.env.JWT_SECRET);
 
     try {
         const foundUser = await User.findOne({ user: user });
@@ -81,8 +74,6 @@ app.post('/search_user', [
                 //Gerar token JWT caso ache o usuário com senha correta
                 const token = jwt.sign({ user: foundUser.user }, process.env.JWT_SECRET);
 
-                console.log("token: ", token);
-                console.log({ token: token });
                 res.json({ token: token });
             } else {
                 console.log("Senha incorreta");
@@ -103,7 +94,6 @@ app.post('/save_log', async (req, res) => {
       const newLog = new Log(logData);
       await newLog.save();
   
-      console.log("Log salvo com sucesso!");
     } catch (error) {
       console.error('Erro ao salvar o log:', error);
     }
@@ -151,10 +141,9 @@ app.post('/register_hero', verifyToken, [
 
         await redisClient.del('getAllHeroes');
 
-        console.log("Herói inserido com sucesso: " + newHero);
         res.status(200).json({ message: "Herói inserido com sucesso" });
     } catch (error) {
-        console.log('Erro ao cadastrar herói:', error.message);
+
         res.status(500).json({ error: "Erro ao cadastrar herói" });
     }
 });
@@ -164,12 +153,10 @@ app.get('/get_heroes', verifyToken, async (req, res) => {
         const heroesFromCache = await redisClient.get('getAllHeroes');
         if(heroesFromCache){
             const parsedHeroes = JSON.parse(heroesFromCache);
-            console.log("heroesFromCache: ", parsedHeroes)
             return res.json(parsedHeroes);
         }
         const heroes = await Hero.find(); // Obtém todos os heróis do MongoDB
         await redisClient.set('getAllHeroes', JSON.stringify(heroes), { EX: 120 });
-        console.log("Heroes: ", heroes)
         res.json(heroes);
     } catch (error) {
         console.error('Erro ao obter heróis:', error.message);

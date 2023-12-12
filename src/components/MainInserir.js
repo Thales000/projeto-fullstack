@@ -37,11 +37,9 @@ const MainInserir = () => {
         body: JSON.stringify(hero),
       });
 
-      console.log("heroi mainserir: ", hero);
   
       if (response.ok) {
 
-        console.log('Herói inserido com sucesso!!!', hero);
         setInserirSuccess(`Herói ${hero.name} inserido com sucesso!`);
         
         setImageURL('');

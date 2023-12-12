@@ -15,9 +15,6 @@ const MainLogin = () => {
     setPasswordError(null);
     setUserError(null);
 
-    console.log('User:' , user);
-    console.log('Password:', password);
-
     try {
         const token = localStorage.getItem('token');
         console.log("Token antes da requisição: ", token);
@@ -35,7 +32,6 @@ const MainLogin = () => {
             const data = await response.json();
             const token = data.token;
 
-            console.log("Token LocalStorage: ", token);
             //Armazenar o token em localStorage
             localStorage.setItem('token', token);
 
