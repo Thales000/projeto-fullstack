@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Container } from 'react-bootstrap';
+import { Form, Button, Container, Alert } from 'react-bootstrap';
 import '../assets/Main.css';
 
 const MainInserir = () => {
@@ -8,10 +8,14 @@ const MainInserir = () => {
   const [name, setName] = useState('');
   const [attr, setAttr] = useState('');
   const [attackType, setAttackType] = useState('');
+  const [inserirError, setInserirError] = useState(null);
+  const [inserirSuccess, setInserirSuccess] = useState(null);
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setInserirError(null);
+    setInserirSuccess(null);
 
     const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
 
@@ -33,12 +37,30 @@ const MainInserir = () => {
         body: JSON.stringify(hero),
       });
 
-      console.log(hero);
+      console.log("heroi mainserir: ", hero);
   
       if (response.ok) {
-        console.log('Herói inserido com sucesso!', hero);
+
+        console.log('Herói inserido com sucesso!!!', hero);
+        setInserirSuccess(`Herói ${hero.name} inserido com sucesso!`);
+        
+        setImageURL('');
+        setName('');
+        setAttr('');
+        setAttackType('');
       } else {
-        console.error('Erro ao inserir herói:', response.statusText);
+        const errorData = await response.json();
+        if (errorData.error === "Sem URL") {
+          setInserirError("Campo da URL da imagem precisa ser preenchida");
+        } else if (errorData.error === "Sem nome") {
+          setInserirError("Campo do nome do herói precisa ser preenchido");
+        } else if (errorData.error === "Sem atributo") {
+          setInserirError("Campo do atributo do herói precisa ser preenchido");
+        } else if (errorData.error === "Sem tipo de ataque") {
+          setInserirError("Campo do tipo de ataque do herói precisa ser preenchido");
+        } else {
+          console.log(`Erro: ${errorData.message}`);
+        }
       }
     } catch (error) {
       console.error('Erro ao inserir herói:', error.message);
@@ -47,7 +69,9 @@ const MainInserir = () => {
   
   return (
     <main>
-      <Container>
+      <Container className='container-sm'>
+        {inserirError && <Alert className='mb-5 alert-sm' variant="danger">{inserirError}</Alert>}
+        {inserirSuccess && <Alert className='mb-5 alert-sm' variant="success">{inserirSuccess}</Alert>}
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-5">
             <Form.Label>URL da Imagem</Form.Label>

@@ -88,17 +88,27 @@ app.post('/save_log', async (req, res) => {
     }
   });
 
-app.post('/register_hero', verifyToken, async (req, res) => {
-    try{
+  app.post('/register_hero', verifyToken, async (req, res) => {
+    try {
+        if (req.body.imageURL === '') {
+            return res.status(401).json({ error: "Sem URL" });
+        } else if (req.body.name === '') {
+            return res.status(401).json({ error: "Sem nome" });
+        } else if (req.body.attr === '') {
+            return res.status(401).json({ error: "Sem atributo" });
+        } else if (req.body.attackType === '') {
+            return res.status(401).json({ error: "Sem tipo de ataque" });
+        }
         const newHero = new Hero(req.body);
         await newHero.save();
 
         await redisClient.del('getAllHeroes');
 
         console.log("Herói inserido com sucesso: " + newHero);
-
+        res.status(200).json({ message: "Herói inserido com sucesso" });
     } catch (error) {
-        console.error('Erro ao cadastrar herói:', error.message);
+        console.log('Erro ao cadastrar herói:', error.message);
+        res.status(500).json({ error: "Erro ao cadastrar herói" });
     }
 });
 
@@ -111,7 +121,7 @@ app.get('/get_heroes', verifyToken, async (req, res) => {
             return res.json(parsedHeroes);
         }
         const heroes = await Hero.find(); // Obtém todos os heróis do MongoDB
-        await redisClient.set('getAllHeroes', JSON.stringify(heroes), { EX: 60 });
+        await redisClient.set('getAllHeroes', JSON.stringify(heroes), { EX: 120 });
         console.log("Heroes: ", heroes)
         res.json(heroes);
     } catch (error) {
