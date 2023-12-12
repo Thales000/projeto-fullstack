@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const server = require('http').createServer(app);
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const helmet = require('helmet');
 const { body } = require('express-validator');
 require("dotenv").config();
 const PORT = 3001;
@@ -20,6 +21,7 @@ const Log = require('./src/models/Log');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(helmet());
 app.use(cors({
     exposedHeaders: ['Authorization'],
 }));
