@@ -7,6 +7,7 @@ const server = require('http').createServer(app);
 const jwt = require('jsonwebtoken');
 const helmet = require('helmet');
 const bcrypt = require('bcrypt');
+const rateLimit = require('express-rate-limit');
 const { body } = require('express-validator');
 require("dotenv").config();
 const PORT = 3001;
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
     console.log("Headers da requisição: ", req.headers);
     next();
   });
+  
 
 const verifyToken = (req, res, next) => {
     const token = req.headers['authorization'];
@@ -54,10 +56,18 @@ const verifyToken = (req, res, next) => {
     });
 };
 
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+    handler: (req, res) => {
+        res.status(429).json({ error: "Muitas tentativas de login a partir deste IP, por favor, tente novamente após 15 minutos." });
+    },
+});
+
 app.post('/search_user', [
     body('user').escape(),
     body('password').escape(),
-], async (req, res) => {
+], loginLimiter, async (req, res) => {
     const { user, password } = req.body;
     console.log("JWT_SECRET",process.env.JWT_SECRET);
 

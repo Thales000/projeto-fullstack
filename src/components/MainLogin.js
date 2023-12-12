@@ -41,6 +41,9 @@ const MainLogin = () => {
 
             navigate('/buscar');
             
+        } else if (response.status === 429) {
+            const errorData = await response.json();
+            setUserError(errorData.error);
         } else {
             const errorData = await response.json();
             if (errorData.error === "Senha incorreta") {

@@ -1,25 +1,22 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import '../assets/Main.css';
 
 const MainCadastrar = () => {
     const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
-    const [userError, setUserError] = useState(null);
-    const [passwordError, setPasswordError] = useState(null);
+    const [error, setError] = useState(null);
     const [registerSuccess, setRegisterSuccess] = useState(null);
-    const navigate = useNavigate();
 
     const handleRegisterSubmit = async (e) => {
         e.preventDefault();
-        setUserError(null);
-        setPasswordError(null);
+        setError(null);
         setRegisterSuccess(null);
 
         if(password !== password2){
-            setPasswordError("Senhas diferentes, tente novamente");
+            setError("Senhas diferentes, tente novamente");
             setPassword('');
             setPassword2('');
             return
@@ -40,7 +37,7 @@ const MainCadastrar = () => {
                 setRegisterSuccess(`Usuário ${user} cadastrado com sucesso!`);
             } else {
                 const errorData = await response.json();
-                setUserError("Usuário já existente");
+                setError("Usuário já existente");
                 console.error(`Erro: ${errorData.error}`);
             }
         } catch (error) {
@@ -52,9 +49,10 @@ const MainCadastrar = () => {
     return (
         <main>
         <Container>
-            {registerSuccess && <Alert className='mb-5 alert-sm' variant="success">{registerSuccess}</Alert>}
             <Row className="justify-content-center">
             <Col md={6}>
+                {registerSuccess && <Alert className='mb-5 alert-sm' variant="success">{registerSuccess}</Alert>}
+                {error && <Alert className='mb-5 alert-sm' variant="danger">{error}</Alert>}
                 <h1 className="text-center mb-5">Cadastro</h1>
                 <Form onSubmit={handleRegisterSubmit}>
                 <Form.Group>
@@ -68,7 +66,6 @@ const MainCadastrar = () => {
                     required
                 />
                 </Form.Group>
-                {userError && <Alert className='my-3 alert-sm' variant="danger">{userError}</Alert>}
 
                 <Form.Group>
                     <Form.Label>Senha</Form.Label>
@@ -93,7 +90,6 @@ const MainCadastrar = () => {
                     required
                 />
                 </Form.Group>
-                {passwordError && <Alert className='my-3 alert-sm' variant="danger">{passwordError}</Alert>}
 
                 <Button variant="primary btn-danger" type="submit" className='my-4'>
                     Cadastrar
