@@ -77,6 +77,8 @@ app.post('/register_hero', verifyToken, async (req, res) => {
         const newHero = new Hero(req.body);
         await newHero.save();
 
+        await redisClient.del('getAllHeroes');
+
         console.log("Herói inserido com sucesso: " + newHero);
 
     } catch (error) {
