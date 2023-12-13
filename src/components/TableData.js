@@ -33,7 +33,12 @@ function TableData() {
                 <tbody>
                     {currentItems.map(item => (
                         <tr key={item._id}>
-                            <td> <Image src={item.imageURL} alt='hero_image' thumbnail /> </td>
+                            <td> <Image
+                                src={item.imageURL}
+                                alt='hero_image'
+                                thumbnail
+                                style={{ maxWidth: '256px', maxHeight: '144px' }}
+                            /> </td>
                             <td>{item.name}</td>
                             <td>{item.attr}</td>
                             <td>{item.attackType}</td>

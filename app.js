@@ -20,6 +20,7 @@ const Hero = require('./src/models/Hero');
 const User = require('./src/models/User');
 const Log = require('./src/models/Log');
 
+//Configurações do Express
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(helmet());
@@ -27,12 +28,14 @@ app.use(cors({
     exposedHeaders: ['Authorization'],
 }));
 
+//Conexão com o MongoDB
 mongoose.connect(process.env.DB).then(() => {
     console.log('Conectado ao banco de dados com sucesso!');
 }).catch((erro) => {
     console.log('Erro ao se conectar com ao banco de dados: ' + erro);
 })
 
+//Função para verificar o token de autenticação
 const verifyToken = (req, res, next) => {
     const token = req.headers['authorization'];
 
@@ -50,6 +53,7 @@ const verifyToken = (req, res, next) => {
     });
 };
 
+//Limite de tentativas de login
 const loginLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 5,
@@ -58,6 +62,7 @@ const loginLimiter = rateLimit({
     },
 });
 
+//POST para busca de usuário para fazer login
 app.post('/search_user', [
     body('user').escape(),
     body('password').escape(),
@@ -88,6 +93,7 @@ app.post('/search_user', [
     }
 });
 
+//POST para salvar logs
 app.post('/save_log', async (req, res) => {
     try {
       const logData = req.body;
@@ -99,7 +105,8 @@ app.post('/save_log', async (req, res) => {
     }
   });
 
-    app.post('/register_user', async (req, res) => {
+//POST para registrar usuário
+app.post('/register_user', async (req, res) => {
     try {
 
         const { user, password } = req.body;
@@ -108,7 +115,7 @@ app.post('/save_log', async (req, res) => {
             return res.status(401).json({ error: "Usuário já existente" });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10); //bcrypt para hash de senha
 
         const newUser = new User({ user, password: hashedPassword });
         await newUser.save();
@@ -120,6 +127,7 @@ app.post('/save_log', async (req, res) => {
     }
 });
 
+//POST para registrar herói
 app.post('/register_hero', verifyToken, [
     body('imageURL').escape(),
     body('name').escape(),
@@ -139,7 +147,7 @@ app.post('/register_hero', verifyToken, [
         const newHero = new Hero(req.body);
         await newHero.save();
 
-        await redisClient.del('getAllHeroes');
+        await redisClient.del('getAllHeroes'); //Invalidação de cache
 
         res.status(200).json({ message: "Herói inserido com sucesso" });
     } catch (error) {
@@ -148,14 +156,15 @@ app.post('/register_hero', verifyToken, [
     }
 });
 
+//POSTpara obter heróis
 app.get('/get_heroes', verifyToken, async (req, res) => {
     try {
         const heroesFromCache = await redisClient.get('getAllHeroes');
-        if(heroesFromCache){
+        if(heroesFromCache){ //REDIS
             const parsedHeroes = JSON.parse(heroesFromCache);
             return res.json(parsedHeroes);
         }
-        const heroes = await Hero.find(); // Obtém todos os heróis do MongoDB
+        heroes = await Hero.find().sort({ name: 1 }); // Obtém todos os heróis do MongoDB em ordem alfabética
         await redisClient.set('getAllHeroes', JSON.stringify(heroes), { EX: 120 });
         res.json(heroes);
     } catch (error) {
@@ -163,6 +172,7 @@ app.get('/get_heroes', verifyToken, async (req, res) => {
     }
 });
 
+//Inicialização do servidor
 const startup = async() => {
     await redisClient.connect();
     server.listen(PORT, () => {
