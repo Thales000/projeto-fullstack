@@ -21,6 +21,12 @@ const MainCadastrar = () => {
             setPassword2('');
             return
         }
+        if(password.length < 6){
+            setError("Senha tem que ser maior de 6 dígitos ou mais")
+            setPassword('');
+            setPassword2('');
+            return
+        }
 
         try {
             const response = await fetch('http://localhost:3001/register_user', {
